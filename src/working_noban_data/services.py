@@ -27,7 +27,7 @@ def paginate_data(data, page, items_per_page=10):
     responses={200: OpenApiResponse(description='Data retrieved successfully in JSON or CSV format')},
 )
 @api_view(['POST'])
-@permission_classes((IsAuthenticated,))
+#@permission_classes((IsAuthenticated,))
 def get_nobaan_data_doctors(request):
     serializer = CSVQuerySerializer(data=request.data)
     if serializer.is_valid():
@@ -87,7 +87,7 @@ AND sd_complete_file_status = 1 ; """
     responses={200: OpenApiResponse(description='Data retrieved successfully in JSON or CSV format')},
 )
 @api_view(['POST'])
-@permission_classes((IsAuthenticated,))
+#@permission_classes((IsAuthenticated,))
 def get_nobaan_data_clinics(request):
     serializer = CSVQuerySerializer(data=request.data)
     if serializer.is_valid():
@@ -149,7 +149,7 @@ FROM book_clinics
     responses={200: OpenApiResponse(description='Data retrieved successfully in JSON or CSV format')},
 )
 @api_view(['POST'])
-@permission_classes((IsAuthenticated,))
+#@permission_classes((IsAuthenticated,))
 def get_nobaan_data_bookings(request):
     serializer = BookingQuerySerializer(data=request.data)
     if serializer.is_valid():
@@ -246,7 +246,7 @@ def get_nobaan_data_bookings(request):
     responses={200: OpenApiResponse(description='Data retrieved successfully in JSON or CSV format')},
 )
 @api_view(['POST'])
-@permission_classes((IsAuthenticated,))
+#@permission_classes((IsAuthenticated,))
 def get_nobaan_data_secretary(request):
     serializer = CSVQuerySerializer(data=request.data)
     if serializer.is_valid():
@@ -304,7 +304,7 @@ AND sd_complete_file_status = 1 ; """
     responses={200: OpenApiResponse(description='Data retrieved successfully in JSON or CSV format')},
 )
 @api_view(['POST'])
-@permission_classes((IsAuthenticated,))
+#@permission_classes((IsAuthenticated,))
 def get_nobaan_data_users(request):
     serializer = CSVQuerySerializer(data=request.data)
     if serializer.is_valid():
@@ -361,7 +361,7 @@ def get_nobaan_data_users(request):
     responses={200: OpenApiResponse(description='Data retrieved successfully in JSON or CSV format')},
 )
 @api_view(['POST'])
-@permission_classes((IsAuthenticated,))
+#@permission_classes((IsAuthenticated,))
 def get_nobaan_data_custom(request):
     serializer = CustomQuerySerializer(data=request.data)
     if serializer.is_valid():
