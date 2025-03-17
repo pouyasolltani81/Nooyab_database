@@ -189,8 +189,8 @@ REST_FRAMEWORK = {
 
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'BackBoiler Model API',
-    'DESCRIPTION': 'BackBoiler framework for every Django Project needs.',
+    'TITLE': 'Nobaan API',
+    'DESCRIPTION': 'API for nobaan database',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'PREPROCESSING_HOOKS': ['app.swagger_schema.preprocessing_filter_spec']

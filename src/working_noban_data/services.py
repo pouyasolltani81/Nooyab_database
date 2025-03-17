@@ -364,11 +364,16 @@ def get_nobaan_data_secretary(request):
         csv_flag = serializer.validated_data.get('csv', False)
         page = serializer.validated_data.get('page', None)
         
-        query = """SELECT *
-FROM general_users
-WHERE sd_status = 2
-AND sd_kind = 2
-AND sd_complete_file_status = 1 ; """
+        query = """SELECT gu.*, 
+       gc.sd_name AS city_name, 
+       gp.sd_name AS province_name
+FROM general_users gu
+LEFT JOIN general_city gc ON gu.sd_city = gc.sd_id
+LEFT JOIN general_province gp ON gu.sd_province = gp.sd_id
+WHERE gu.sd_status = 2
+AND gu.sd_kind = 2
+AND gu.sd_complete_file_status = 1;
+"""
        
         try:
             with connections['nobaan'].cursor() as cursor:
@@ -423,7 +428,13 @@ def get_nobaan_data_users(request):
         csv_flag = serializer.validated_data.get('csv', False)
         page = serializer.validated_data.get('page', None)
         
-        query = "SELECT * FROM general_members"
+        query = """SELECT gm.*, 
+       gc.sd_name AS city_name, 
+       gp.sd_name AS province_name
+FROM general_members gm
+LEFT JOIN general_city gc ON gm.sd_city = gc.sd_id
+LEFT JOIN general_province gp ON gm.sd_province = gp.sd_id;
+"""
        
         try:
             with connections['nobaan'].cursor() as cursor:
