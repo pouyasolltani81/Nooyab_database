@@ -43,16 +43,17 @@ INSTALLED_APPS = [
 ]
 
 # CORS Headers
-
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = False  # Change to True to disable CORS entirely
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost',
     'http://79.175.177.113:16300',
+    'http://192.168.15.221',  # Added this IP
 ]
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost',
+    'http://192.168.15.221',  # Added this IP
 ]
 CORS_ALLOW_HEADERS = [
     "accept", "referer", "accept-encoding", "authorization",
@@ -64,8 +65,11 @@ CORS_ALLOW_METHODS = [
     'POST',
     'OPTIONS',
 ]
-
 CORS_ALLOW_CREDENTIALS = True
+
+# Uncomment the following to disable CORS entirely
+# CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOWED_ORIGINS = []  # Empty the list
 
 # Tailwind Settings
 TAILWIND_APP_NAME = 'theme'
