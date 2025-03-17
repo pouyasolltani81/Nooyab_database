@@ -49,16 +49,17 @@ AND sd_complete_file_status = 1 ; """
             data = [dict(zip(columns, row)) for row in rows]
             
             if csv_flag:
-                response = HttpResponse(content_type='text/csv; charset=utf-8')
-                response['Content-Disposition'] = 'attachment; filename="nobaan_data_doctors.csv"'
-                
-                # Write the BOM to the response
+                response = HttpResponse(content_type='text/csv; charset=utf-8-sig')
+                response['Content-Disposition'] = 'attachment; filename="nobaan_booking_data.csv"'
+
+                # Write the BOM for proper encoding in Excel
                 response.write('\ufeff')
-                
-                writer = csv.DictWriter(response, fieldnames=columns)
+
+                writer = csv.DictWriter(response, fieldnames=columns, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
                 writer.writeheader()
                 for row in data:
                     writer.writerow(row)
+
                 return response
             else:
                 if page:
@@ -107,16 +108,17 @@ FROM book_clinics
             data = [dict(zip(columns, row)) for row in rows]
             
             if csv_flag:
-                response = HttpResponse(content_type='text/csv; charset=utf-8')
-                response['Content-Disposition'] = 'attachment; filename="nobaan_data_doctors.csv"'
-                
-                # Write the BOM to the response
+                response = HttpResponse(content_type='text/csv; charset=utf-8-sig')
+                response['Content-Disposition'] = 'attachment; filename="nobaan_booking_data.csv"'
+
+                # Write the BOM for proper encoding in Excel
                 response.write('\ufeff')
-                
-                writer = csv.DictWriter(response, fieldnames=columns)
+
+                writer = csv.DictWriter(response, fieldnames=columns, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
                 writer.writeheader()
                 for row in data:
                     writer.writerow(row)
+
                 return response
             else:
                 if page:
@@ -268,16 +270,17 @@ AND sd_complete_file_status = 1 ; """
             data = [dict(zip(columns, row)) for row in rows]
             
             if csv_flag:
-                response = HttpResponse(content_type='text/csv; charset=utf-8')
-                response['Content-Disposition'] = 'attachment; filename="nobaan_data_doctors.csv"'
-                
-                # Write the BOM to the response
+                response = HttpResponse(content_type='text/csv; charset=utf-8-sig')
+                response['Content-Disposition'] = 'attachment; filename="nobaan_booking_data.csv"'
+
+                # Write the BOM for proper encoding in Excel
                 response.write('\ufeff')
-                
-                writer = csv.DictWriter(response, fieldnames=columns)
+
+                writer = csv.DictWriter(response, fieldnames=columns, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
                 writer.writeheader()
                 for row in data:
                     writer.writerow(row)
+
                 return response
             else:
                 if page:
@@ -322,18 +325,17 @@ def get_nobaan_data_users(request):
             data = [dict(zip(columns, row)) for row in rows]
             
             if csv_flag:
-                response = HttpResponse(content_type='text/csv; charset=utf-8')
-                response['Content-Disposition'] = 'attachment; filename="nobaan_data_users.csv"'
-                
-                
-                # Write the BOM to the response
+                response = HttpResponse(content_type='text/csv; charset=utf-8-sig')
+                response['Content-Disposition'] = 'attachment; filename="nobaan_booking_data.csv"'
+
+                # Write the BOM for proper encoding in Excel
                 response.write('\ufeff')
-                
-                
-                writer = csv.DictWriter(response, fieldnames=columns)
+
+                writer = csv.DictWriter(response, fieldnames=columns, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
                 writer.writeheader()
                 for row in data:
                     writer.writerow(row)
+
                 return response
             else:
                 if page:
@@ -378,17 +380,17 @@ def get_nobaan_data_custom(request):
             data = [dict(zip(columns, row)) for row in rows]
             
             if csv_flag:
-                response = HttpResponse(content_type='text/csv; charset=utf-8')
-                response['Content-Disposition'] = 'attachment; filename="nobaan_data_custom.csv"'
-                
-                
-                # Write the BOM to the response
+                response = HttpResponse(content_type='text/csv; charset=utf-8-sig')
+                response['Content-Disposition'] = 'attachment; filename="nobaan_booking_data.csv"'
+
+                # Write the BOM for proper encoding in Excel
                 response.write('\ufeff')
-                
-                writer = csv.DictWriter(response, fieldnames=columns)
+
+                writer = csv.DictWriter(response, fieldnames=columns, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
                 writer.writeheader()
                 for row in data:
                     writer.writerow(row)
+
                 return response
             else:
                 if page:
