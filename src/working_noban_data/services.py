@@ -239,6 +239,110 @@ def get_nobaan_data_bookings(request):
         return JsonResponse({'return': False, 'error': serializer.errors})
     
     
+    
+@extend_schema(
+    description=(
+        'Retrieve filtered booking data from the nobaan database. The query returns a custom set of columns '
+        'from book_booking, general_members, and book_clinics (via book_clinics_doctors) with custom aliases. '
+        'It accepts an optional "date" parameter (defaults to today) and returns only bookings with '
+        'sd_nobat_status = 2, ordered by sd_date descending. '
+        'The response includes the submitted request data and the total booking count for that day.'
+    ),
+    summary='Get filtered booking data with custom column names',
+    methods=['POST'],
+    request=BookingQuerySerializer,
+    responses={200: OpenApiResponse(description='Data retrieved successfully in JSON or CSV format')},
+)
+@api_view(['POST'])
+#@permission_classes((IsAuthenticated,))
+def get_nobaan_data_esterdad(request):
+    serializer = BookingQuerySerializer(data=request.data)
+    if serializer.is_valid():
+        csv_flag = serializer.validated_data.get('csv', False)
+        page = serializer.validated_data.get('page', None)
+        # Use provided date or default to today
+        date_param = serializer.validated_data.get('date') or datetime.date.today()
+        
+        # Build the query selecting only the desired columns with custom aliases.
+        query = """
+                    SELECT 
+            bb.sd_nobat_date_j AS booking_date_j,
+            bb.sd_nobat_time AS booking_time,
+            bb.sd_pay_visit AS pay_visit,
+            bb.sd_date AS booking_date,
+            bb.sd_update AS update_date,
+            bb.sd_pay_insurance AS pay_insurance,
+            bb.sd_rahgiri AS rahgiri_code,
+            bb.sd_pay_doctor AS pay_doctor,
+            bb.sd_bime AS bime,
+            gm.sd_name AS member_name,
+            gm.sd_family AS member_family,
+            gm.sd_melicode AS member_melicode,
+            gm.sd_mobile AS member_mobile,
+            bc.sd_name AS doctor_name
+        FROM book_booking bb
+        INNER JOIN general_members gm ON bb.sd_uid = gm.sd_id
+        INNER JOIN book_clinics_doctors bcd ON bb.sd_cd_id = bcd.sd_id
+        LEFT JOIN book_clinics bc ON bcd.sd_cid = bc.sd_id
+        WHERE DATE(bb.sd_date) = %s AND bb.sd_back_pos != 1
+        ORDER BY bb.sd_date DESC;
+
+        """
+        try:
+            with connections['nobaan'].cursor() as cursor:
+                # Format the date as YYYY-MM-DD for the query
+                cursor.execute(query, [date_param.strftime('%Y-%m-%d')])
+                columns = [col[0] for col in cursor.description]
+                rows = cursor.fetchall()
+            
+            data = [dict(zip(columns, row)) for row in rows]
+            
+            # Format datetime values to match the table's format ("YYYY-MM-DD HH:MM:SS")
+            for row in data:
+                for key, value in row.items():
+                    if isinstance(value, datetime.datetime):
+                        row[key] = value.strftime('%Y-%m-%d %H:%M:%S')
+            
+            booking_count = len(data)
+            
+            if csv_flag:
+                response = HttpResponse(content_type='text/csv; charset=utf-8-sig')
+                response['Content-Disposition'] = 'attachment; filename="nobaan_booking_data.csv"'
+
+                # Write the BOM for proper encoding in Excel
+                response.write('\ufeff')
+
+                writer = csv.DictWriter(response, fieldnames=columns, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
+                writer.writeheader()
+                for row in data:
+                    writer.writerow(row)
+
+                return response
+
+            else:
+                if page:
+                    paginated_data, total_pages = paginate_data(data, page)
+                    return JsonResponse({
+                        'return': True,
+                        'submitted_data': serializer.validated_data,
+                        'booking_count': booking_count,
+                        'data': paginated_data,
+                        'current_page': page,
+                        'total_pages': total_pages,
+                    })
+                else:
+                    return JsonResponse({
+                        'return': True,
+                        'submitted_data': serializer.validated_data,
+                        'booking_count': booking_count,
+                        'data': data
+                    })
+        except Exception as e:
+            return JsonResponse({'return': False, 'error': str(e)})
+    else:
+        return JsonResponse({'return': False, 'error': serializer.errors})
+    
+    
 @extend_schema(
     description='Retrieve secretaries data from the nobaan database. Returns the data as JSON or CSV based on the "csv" parameter. '
                 'If a "page" parameter is provided, the JSON response will be paginated (10 items per page) and include pagination details.',
