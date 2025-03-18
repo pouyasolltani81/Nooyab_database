@@ -36,7 +36,8 @@ def get_nobaan_data_doctors(request):
         
         query = """SELECT gu.*, 
        gc.sd_name AS city_name, 
-       gp.sd_name AS province_name
+       gp.sd_name AS province_name,
+       gu.sd_id AS id
 FROM general_users gu
 LEFT JOIN general_city gc ON gu.sd_city = gc.sd_id
 LEFT JOIN general_province gp ON gu.sd_province = gp.sd_id
@@ -366,7 +367,9 @@ def get_nobaan_data_secretary(request):
         
         query = """SELECT gu.*, 
        gc.sd_name AS city_name, 
-       gp.sd_name AS province_name
+       gp.sd_name AS province_name,
+       gu.sd_id AS id
+       
 FROM general_users gu
 LEFT JOIN general_city gc ON gu.sd_city = gc.sd_id
 LEFT JOIN general_province gp ON gu.sd_province = gp.sd_id
@@ -430,7 +433,8 @@ def get_nobaan_data_users(request):
         
         query = """SELECT gm.*, 
        gc.sd_name AS city_name, 
-       gp.sd_name AS province_name
+       gp.sd_name AS province_name,
+       gm.sd_id AS id
 FROM general_members gm
 LEFT JOIN general_city gc ON gm.sd_city = gc.sd_id
 LEFT JOIN general_province gp ON gm.sd_province = gp.sd_id;

@@ -46,12 +46,16 @@ INSTALLED_APPS = [
 CORS_ORIGIN_ALLOW_ALL = False  # Change to True to disable CORS entirely
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'http://localhost:3004',
+    
     'http://localhost',
     'http://79.175.177.113:16300',
     'http://192.168.15.221',  # Added this IP
 ]
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
+    'http://localhost:3004',
+    
     'http://localhost',
     'http://192.168.15.221',  # Added this IP
 ]
